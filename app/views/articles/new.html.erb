@@ -7,10 +7,8 @@
           <%= f.input :price, label: 'Prix' %>
           <%= f.input :color, label: "Couleur de l'article", as: :select, collection: ['Rouge', 'Bleu', 'Vert', 'Jaune', 'Noir', 'Orange', 'Rose', 'Fushia', 'Doré', 'Argenté', 'Marron', 'Gris clair', 'Gris foncé', 'Kaki', 'Pastel', 'Blanc'].sort %>
           <%= f.input :size, label: 'Taille' %>
-          <%= f.input :brand, label: 'Marque',  as: :select, collection: ['Adidas', 'Nike', "H&M", 'Zara', 'Bershka', 'Pull and Bear', 'Shein', 'Temu', 'Aliexpress', 'Camaieu', 'Jennyfer', 'Gemo', 'La Halle', 'Autre marque'].sort %>
-          <div data-controller ="brand">
-            <%= f.input :brand, label: 'Nom de la marque' %>
-          </div>
+          <%= f.input :brand, label: 'Marque', as: :select, collection: ['Adidas', 'Nike', "H&M", 'Zara', 'Bershka', 'Pull and Bear', 'Shein', 'Temu', 'Aliexpress', 'Camaieu', 'Jennyfer', 'Gemo', 'La Halle', 'Autre marque'].sort%>
+          <%# <%= f.input :brand, label: 'Nom de la marque'  apparait si Autre marque selectionné %>
           <%= f.input :description, label: 'Description', input_html: { rows: 5 } %>
           <%= f.button :submit, "Ajouter l'article", class: 'btn-submit' %>
         <% end %>

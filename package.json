@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@hotwired/stimulus-webpack-helpers": "^1.0.1",
+    "stimulus": "^3.2.2"
+  }
+}
