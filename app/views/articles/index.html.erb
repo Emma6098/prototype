@@ -1,0 +1,15 @@
+<h1>Index</h1>
+
+<%= link_to "Ajoute un article !", new_article_path %>
+
+<% @articles.each do |article| %>
+  <%= link_to "article", article_path(article) do%>
+    <div>
+      <h3 class="text-dark taille-titre "><%= article.name %></h3>
+      <b><%= article.price %>€</b>
+      <p><%= article.size %></p>
+      <p><%= article.brand %></p>
+      <%# favoris %>
+    <div>
+  <% end %>
+<% end %>
