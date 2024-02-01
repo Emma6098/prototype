@@ -6,8 +6,9 @@ class User < ApplicationRecord
   has_many :articles, dependent: :destroy
   has_many :orders
   has_many :reviews, dependent: :destroy
+  has_one_attached :photo
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :address, presence: true
+  validates :nick_name, presence: true
 
 end

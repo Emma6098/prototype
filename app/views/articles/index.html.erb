@@ -3,9 +3,9 @@
 <%= link_to "Ajoute un article !", new_article_path %>
 
 <% @articles.each do |article| %>
-  <%= link_to "article", article_path(article) do%>
+  <%= link_to article_path(article) do%>
     <div>
-      <h3 class="text-dark taille-titre "><%= article.name %></h3>
+      <h3 class="taille-titre"><%= article.name %></h3>
       <b><%= article.price %>€</b>
       <p><%= article.size %></p>
       <p><%= article.brand %></p>
