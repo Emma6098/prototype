@@ -2,6 +2,19 @@
 
 <%= link_to "Ajoute un article !", new_article_path %>
 
+  <div class="search">
+      <%= form_tag articles_path, method: :get, class: "form-inline" do %>
+        <div class="input-group">
+          <div class="input-group-append">
+            <%= button_tag type: 'submit', class: "btn btn-search" do %>
+              <i class="fa-solid fa-magnifying-glass"></i>
+            <% end %>
+          </div>
+          <%= text_field_tag :keyword, params[:keyword], class: "form-control search", placeholder: "Rechercher un Article !" %>
+        </div>
+      <% end %>
+  </div>
+
 <% @articles.each do |article| %>
   <%= link_to article_path(article) do%>
     <div>
