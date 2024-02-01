@@ -9,6 +9,7 @@
           <%= f.input :size, label: 'Taille' %>
           <%= f.input :brand, label: 'Marque', as: :select, collection: ['Adidas', 'Nike', "H&M", 'Zara', 'Bershka', 'Pull and Bear', 'Shein', 'Temu', 'Aliexpress', 'Camaieu', 'Jennyfer', 'Gemo', 'La Halle', 'Autre marque'].sort%>
           <%# <%= f.input :brand, label: 'Nom de la marque'  apparait si Autre marque selectionné %>
+          <%= f.input :state, label: 'Etat', as: :select, collection: ["Neuf avec emballage d'origine", "Neuf", "Très peu porté", "Porté de nombreuse fois", "Présente des défauts"]%>
           <%= f.input :description, label: 'Description', input_html: { rows: 5 } %>
           <%= f.button :submit, "Ajouter l'article", class: 'btn-submit' %>
         <% end %>

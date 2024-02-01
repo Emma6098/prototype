@@ -21,8 +21,10 @@ class ArticlesController < ApplicationController
 
   def create
     @article = Article.new(article_params)
+    @article.user = current_user
+
     if @article.save
-      redirect_to article_path(@article)
+      redirect_to article_path(@article), notice: 'Article was successfully created.'
     else
       render :new, status: :unprocessable_entity
     end
@@ -53,7 +55,7 @@ class ArticlesController < ApplicationController
   private
 
   def article_params
-    params.require(:article).permit(:name, :description, :price, :photo)
+    params.require(:article).permit(:name, :description, :price, :photo, :categorie, :color, :size, :brand, :state)
   end
 
 
