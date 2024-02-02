@@ -1,0 +1,61 @@
+<% if @user == current_user %>
+    <h1> Mon profil </h1>
+        <div class="profil-content">
+          <h2 class="user-name"><%= current_user.first_name.capitalize %> <%= current_user.last_name.capitalize %></h2>
+          <p><i><%= current_user.email %></i></p>
+          <%# <%if @user.my_reviews.present?%>
+            <%# <p><%= @average_rating %>
+             <%# <i class="fas fa-star star-yellow"></i></p> %>
+<%end%>
+        </div>
+        <div class="update">
+          <%= link_to edit_user_registration_path do%>
+              <i class="fa-solid fa-pencil"></i>
+          <%end%>
+        </div>
+        <div class="profil-avatar">
+          <img class="avatar-i avatar-absolut-i" src="https://res.cloudinary.com/dhvssfzz1/image/upload/v1693474293/avatar-_mtc5tf.jpg" alt="">
+        </div>
+      </div>
+
+    <h3 class="mt-5 mb-4">Mes avis</h3>
+<% if current_user.reviews.empty? %>
+      <small><em class="text-muted">Tu n'as pas encore d'avis </em></small>
+    <% end %>
+
+    <% current_user.reviews.each do |review| %>
+      <div>
+        <p><strong><%= review.user.first_name.capitalize %> <%= review.user.last_name.capitalize %></strong></p>
+          <% review.rating.times do %>
+            <i class="fas fa-star star-yellow"></i>
+          <% end %>
+        <small><em class="text-muted"><%= distance_of_time_in_words_to_now(review.created_at) %> ago</em></small>
+          <p><%= review.comment %></p>
+          <hr>
+      </div>
+    <% end %>
+
+      <div>
+          <div class="profil-content">
+            <h1><%= @user.first_name.capitalize %> <%= @user.last_name.capitalize %></h1>
+            <%if @user.reviews.present?%>
+              <p><%= @average_rating %> <i class="fas fa-star star-yellow"></i></p>
+            <%end%>
+          </div>
+        </div>
+        <h3 class="mt-5 mb-4">Avis</h3>
+          <% if @user.reviews.empty? %>
+            <small><em class="text-muted"><%= @user.first_name.capitalize %> n'a aucun avis pour le moment !</em></small>
+          <% end %>
+          <% @user.reviews.each do |review| %>
+            <div>
+            <p><strong><%= review.user.first_name.capitalize %> <%= review.user.last_name.capitalize %></strong></p>
+              <% review.rating.times do %>
+                <i class="fas fa-star star-yellow"></i>
+              <% end %>
+              <small><em class="text-muted"><%= distance_of_time_in_words_to_now(review.created_at) %> ago</em></small>
+              <p><%= review.comment %></p>
+            </div>
+            <hr>
+          <% end %>
+      </div>
