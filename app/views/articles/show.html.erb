@@ -1,1 +1,16 @@
-<h1>Show</h1>
+<%= link_to "Retour", articles_path %>
+<%# image %>
+<%# favoris coeur %>
+<h1 class ="show-title"><%=@article.name%></h1>
+<p class="show-text"><%=@article.description%></p>
+<p class="show-price"><%=@article.price%></p>
+<p class ="show-text"><%=@article.brand%></p>
+<p class ="show-text"><%=@article.color%></p>
+<p class ="show-text"><%=@article.state%></p>
+<p class ="show-text"><%=@article.size%></p>
+<button>Faire une offre</button>
+<button>Acheter l'article</button>
+<button>Contactez le vendeur</button>
+
+<h3>Articles similaires</h3>
+<%# liste d'article similaires %>

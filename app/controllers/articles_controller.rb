@@ -13,6 +13,7 @@ class ArticlesController < ApplicationController
   def show
     @article = Article.find(params[:id])
     @order = Order.new
+    @user = @article.user
   end
 
   def new
