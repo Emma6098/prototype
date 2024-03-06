@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :set_article, only: [:show, :edit, :update, :destroy]
+  before_action :set_article, only: [:create, :show, :edit, :update, :destroy]
 
   def create
     @order = Order.new
@@ -7,13 +7,14 @@ class OrdersController < ApplicationController
     @order.user = current_user
     @order.status = "en attente de validation"
     @order.save!
-    redirect_to article_path(@order.article)
+    redirect_to control_path(@order)
+
   end
 
   def destroy
     @order_delete = Order.find(params[:id])
     @order_delete.destroy
-    redirect_to article_path(@order.article), status: see_other
+    redirect_to control_path(@order.article), status: see_other
   end
 
   private
