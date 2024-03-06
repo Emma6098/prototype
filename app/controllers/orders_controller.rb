@@ -2,9 +2,10 @@ class OrdersController < ApplicationController
   before_action :set_article, only: [:show, :edit, :update, :destroy]
 
   def create
-    @order = Order.new(order_params)
+    @order = Order.new
     @order.article = @article
     @order.user = current_user
+    @order.status = "en attente de validation"
     @order.save!
     redirect_to article_path(@order.article)
   end
