@@ -7,8 +7,8 @@ Rails.application.routes.draw do
   end
 
   resources :orders, only: :destroy do
-    patch "accept", to: "pages#accept"
-    patch "reject", to: "pages#reject"
+    patch "accept", to: "orders#accept"
+    patch "reject", to: "orders#reject"
   end
 
   resources :users, only: :show do

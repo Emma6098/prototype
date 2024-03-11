@@ -8,9 +8,6 @@
 <p class ="show-text"><%=@article.color%></p>
 <p class ="show-text"><%=@article.state%></p>
 <p class ="show-text"><%=@article.size%></p>
-<button>Faire une offre</button>
-<button>Acheter l'article</button>
-<button>Contactez le vendeur</button>
 
 <% if current_user == @article.user && @article.orders.exists?(article_id: @article.id) == false %>
       <button type="button" class="btn button-supprimer" data-bs-toggle="modal" data-bs-target="#confirmationModal">
@@ -24,11 +21,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                Etes vous sûr de vouloir supprimer cette visite ?
+                Etes vous sûr de vouloir supprimer cette article ?
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Annuler</button>
-                <%=link_to "Supprimer la visite", article_path(@article), data: {turbo_method: :delete}, class:"btn button-supprimer-mod"%>
+                <%=link_to "Supprimer la article", article_path(@article), data: {turbo_method: :delete}, class:"btn button-supprimer-mod"%>
               </div>
             </div>
           </div>
@@ -40,7 +37,7 @@
             Article vendu !
           </div>
         <%elsif user_order.status == "en attente de validation"%>
-          <div class="btn button-reserver">En attente d'un réponse</div>
+          <div class="btn button-reserver">En attente d'une réponse</div>
         <%elsif user_order.status == "rejetée"%>
           <div class="btn button-reserver">Votre offre a été rejetée</div>
         <%end%>
@@ -48,7 +45,33 @@
     <% elsif  current_user == @article.user && @article.orders.exists?(article_id: @article.id) %>
       <div class="btn button-reserver">L'article a été réservée</div>
     <% else %>
+
+    <%= link_to "Acheter l'article", article_orders_path(@article, buy_now: true), method: :post, class: "btn button-reserver" %>
+
       <button type="button" class="btn button-reserver" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+          Faire une offre
+      </button>
+      <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+          <%= form_with(model: @order, url: article_orders_path(@article), method: :post) do |form| %>
+            <div class="mb-3">
+              <%= form.label :offer_price, "Prix de l'offre" %>
+              <%= form.text_field :offer_price, class: "form-control" %>
+            </div>
+            <%= form.submit "Soumettre l'offre", class: "btn btn-primary" %>
+          <% end %>
+        </div>
+        </div>
+      </div>
+      </div>
+
+        <button type="button" class="btn button-reserver" data-bs-toggle="modal" data-bs-target="#confirmationModal">
           Acheter l'article
       </button>
       <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
@@ -64,6 +87,27 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Annuler</button>
             <%=link_to "Acheter l'article", article_orders_path(@article), data: {turbo_method: :post}, class:"btn button-re-mod"%>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <button type="button" class="btn button-reserver" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+          Contacter le vendeur
+      </button>
+      <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Êtes-vous sûr de vouloir acheter cette article ?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Annuler</button>
+            <%=link_to "Contacter le vendeur", article_orders_path(@article), data: {turbo_method: :post}, class:"btn button-re-mod"%>
           </div>
         </div>
       </div>
