@@ -1,5 +1,5 @@
- <h1>Mes artcicles en ventes</h1>
-
+<h1>Tableau de bord</h1>
+ <h2>Mes articles en ventes</h2>
     <% if current_user.articles.empty? %>
       <div class="empty"><p><i>Vous ne proposez aucun article à la vente pour le moment</i></p></div>
       <div><%= link_to "Ajouter un article", new_article_path, class: "btn button-reserver" %></div>
@@ -15,11 +15,11 @@
                   <% article.orders.each do |order| %>
                     <% if order.status == "en attente de validation" %>
                       <%= link_to user_path(order.user), class: "nav-link" do %>
-                        <p class="text-muted">Offre réalisée par : <b><%= order.user.first_name.capitalize %></b></p>
+                        <p class="text-muted"><b><%= order.user.first_name.capitalize %></b> te propose un prix de : <%= order.offer_price %> €</p>
                       <% end %>
                       <p class="text-muted"><i><%= order.status %></i></p>
-                      <p><%= link_to "Accepter l'offre'", order_accept_path(order), data: { turbo_method: :patch, turbo_confirm: "Etes vous sûr de vouloir accepter cette réservation?" }, class: "btn btn-accept text-decoration-none" %></p>
-                      <p><%= link_to "Rejeter l'offre'", order_reject_path(order), data: { turbo_method: :patch, turbo_confirm: "Etes vous sûr de vouloir rejeter cette réservation?" }, class: "btn btn-reject text-decoration-none" %></p>
+                      <p><%= link_to "Accepter l'offre", order_accept_path(order), data: { turbo_method: :patch, turbo_confirm: "Etes vous sûr de vouloir accepter cette offre ?" }, class: "btn btn-accept text-decoration-none" %></p>
+                      <p><%= link_to "Rejeter l'offre", order_reject_path(order), data: { turbo_method: :patch, turbo_confirm: "Etes vous sûr de vouloir rejeter cette offre ?" }, class: "btn btn-reject text-decoration-none" %></p>
                     <% end %>
                   <% end %>
                 </div>
@@ -117,7 +117,7 @@
   </div>
 
   <div class="visites">
-    <h1>Mes achats</h1>
+    <h2>Mes achats</h2>
     <% if current_user.orders.empty? %>
       <div class="empty"><i> Vous n'avez effectuer aucun achat pour le moment</i></div>
       <div><%= link_to "Trouver un article", articles_path, class: "btn button-reserver" %></div>

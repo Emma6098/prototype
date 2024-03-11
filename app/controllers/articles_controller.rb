@@ -33,7 +33,7 @@ class ArticlesController < ApplicationController
 
   def edit
     @article = Article.find(params[:id])
-    # @orders = Order.all
+    @orders = Order.all
   end
 
   def update
