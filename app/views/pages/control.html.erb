@@ -1,229 +1,124 @@
 <h1>Tableau de bord</h1>
- <h2>Mes articles en ventes</h2>
-    <% if current_user.articles.empty? %>
-      <div class="empty"><p><i>Vous ne proposez aucun article à la vente pour le moment</i></p></div>
-      <div><%= link_to "Ajouter un article", new_article_path, class: "btn button-reserver" %></div>
-    <% else %>
-      <% if current_user.articles.any? { |article| article.orders.any? { |order| order.status == "en attente de validation" } } %>
-        <div class="section">
-          <h3 class="mb-3">Offres en attente &#8987</h3>
-          <% current_user.articles.each do |article| %>
-            <% if article.orders.any? { |order| order.status == "en attente de validation" } %>
-              <%= link_to article_path(article), class: "text-decoration-none" do %>
-                <div class="card-control">
-                  <h3 class="text-dark"><%= truncate(article.name, length: 28, omission: '...') %></h3>
-                  <% article.orders.each do |order| %>
-                    <% if order.status == "en attente de validation" %>
-                      <%= link_to user_path(order.user), class: "nav-link" do %>
-                        <p class="text-muted"><b><%= order.user.first_name.capitalize %></b> te propose un prix de : <%= order.offer_price %> €</p>
-                      <% end %>
-                      <p class="text-muted"><i><%= order.status %></i></p>
-                      <p><%= link_to "Accepter l'offre", order_accept_path(order), data: { turbo_method: :patch, turbo_confirm: "Etes vous sûr de vouloir accepter cette offre ?" }, class: "btn btn-accept text-decoration-none" %></p>
-                      <p><%= link_to "Rejeter l'offre", order_reject_path(order), data: { turbo_method: :patch, turbo_confirm: "Etes vous sûr de vouloir rejeter cette offre ?" }, class: "btn btn-reject text-decoration-none" %></p>
-                    <% end %>
-                  <% end %>
-                </div>
-              <% end %>
-            <% end %>
-          <% end %>
-        </div>
-      <% end %>
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="#">Mes articles en vente</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link " aria-current="page" href="<%= control2_path %>">Mes achats et offres</a>
+  </li>
+</ul>
 
-      <% if current_user.articles.any? { |article| article.orders.any? { |order| order.status == "validée" } } %>
-        <div class="section">
-          <h3 class="mb-3">Offres validées &#9989</h3>
-          <% current_user.articles.each do |article| %>
-            <% if article.orders.any? { |order| order.status == "validée" } %>
-              <%= link_to article_path(article), class: "text-decoration-none" do %>
-                <div class="card-control">
-                  <h3 class="text-dark"><%= truncate(article.name, length: 28, omission: '...') %></h3>
-                  <% article.orders.each do |order| %>
-                    <% if order.status == "validée" %>
-                      <%= link_to user_path(order.user), class: "nav-link" do %>
-                        <p class="text-muted">Offre réalisée par : <b><%= order.user.first_name.capitalize %></b></p>
-                      <% end %>
-                      <p class="text-muted"><i><%= order.status %></i></p>
+  <% if current_user.articles.empty? %>
+    <div class="empty"><p><i>Vous ne proposez aucun article à la vente pour le moment</i></p></div>
+    <div><%= link_to "Ajouter un article", new_article_path, class: "btn button-reserver" %></div>
+  <% else %>
+    <% if current_user.articles.any? { |article| article.orders.any? { |order| order.status == "en attente de validation" } } %>
+      <div class="section">
+        <h3 class="mb-3">Offres en attente &#8987</h3>
+        <% current_user.articles.each do |article| %>
+          <% if article.orders.any? { |order| order.status == "en attente de validation" } %>
+            <%= link_to article_path(article), class: "text-decoration-none" do %>
+              <div class="card-control">
+                <h3 class="text-dark"><%= truncate(article.name, length: 28, omission: '...') %></h3>
+                <% article.orders.each do |order| %>
+                  <% if order.status == "en attente de validation" %>
+                    <%= link_to user_path(order.user), class: "nav-link" do %>
+                      <p class="text-muted"><b><%= order.user.first_name.capitalize %></b> te propose un prix de : <%= order.offer_price %> €</p>
                     <% end %>
+                    <p class="text-muted"><i><%= order.status %></i></p>
+                    <p><%= link_to "Accepter l'offre", order_accept_path(order), data: { turbo_method: :patch, turbo_confirm: "Etes vous sûr de vouloir accepter cette offre ?" }, class: "btn btn-accept text-decoration-none" %></p>
+                    <p><%= link_to "Rejeter l'offre", order_reject_path(order), data: { turbo_method: :patch, turbo_confirm: "Etes vous sûr de vouloir rejeter cette offre ?" }, class: "btn btn-reject text-decoration-none" %></p>
                   <% end %>
-                </div>
-              <% end %>
+                <% end %>
+              </div>
             <% end %>
           <% end %>
-        </div>
-      <% end %>
-
-      <% if current_user.articles.any? { |article| article.orders.any? { |order| order.status == "rejetée" } } %>
-        <div class="section">
-          <h3 class="mb-3">Offres rejetées &#10060</h3>
-          <% current_user.articles.each do |article| %>
-            <% if article.orders.any? { |order| order.status == "rejetée" } %>
-              <%= link_to article_path(article), class: "text-decoration-none" do %>
-                <div class="card-control">
-                  <h3 class="text-dark"><%= truncate(article.name, length: 28, omission: '...') %></h3>
-                  <% article.orders.each do |order| %>
-                    <% if order.status == "rejetée" %>
-                      <%= link_to user_path(order.user), class: "nav-link" do %>
-                        <p class="text-muted">Offre réalisée par : <b><%= order.user.first_name.capitalize %></b></p>
-                      <% end %>
-                      <p class="text-muted"><i><%= order.status %></i></p>
-                    <% end %>
-                  <% end %>
-                </div>
-              <% end %>
-            <% end %>
-          <% end %>
-        </div>
-      <% end %>
-
-      <% if current_user.articles.any? { |article| article.orders.any? { |order| order.status == "terminée" } } %>
-        <div class="section">
-          <h3 class="mb-3">Ventes terminées &#127881</h3>
-          <% current_user.articles.each do |article| %>
-            <% if article.orders.any? { |order| order.status == "terminée" } %>
-              <%= link_to article_path(article), class: "text-decoration-none" do %>
-                <div class="card-control">
-                  <h3 class="text-dark"><%= truncate(article.name, length: 28, omission: '...') %></h3>
-                  <% article.orders.each do |order| %>
-                    <% if order.status == "terminée" %>
-                      <p class="text-muted"><i><%= order.status %></i></p>
-                      <%= link_to user_path(order.user), class: "nav-link" do %>
-                        <p class="text-muted">Laissez un avis à <b><%= order.user.first_name.capitalize %></b> !</p>
-                      <% end %>
-                    <% end %>
-                  <% end %>
-                </div>
-              <% end %>
-            <% end %>
-          <% end %>
-        </div>
-      <% end %>
-
-      <% if current_user.articles.any? { |article| article.orders.empty? } %>
-        <div class="section">
-          <h3 class="mb-3">Articles toujours en ventes &#128546</h3>
-          <% current_user.articles.each do |article| %>
-            <% if article.orders.empty? %>
-              <%= link_to article_path(article), class: "text-decoration-none" do %>
-                <div class="card-control">
-                  <h3 class="text-dark"><%= truncate(article.name, length: 28, omission: '...') %></h3>
-                  <p class="text-muted"><i>Aucune offre pour le moment</i></p>
-                </div>
-              <% end %>
-            <% end %>
-          <% end %>
-        </div>
-      <% end %>
+        <% end %>
+      </div>
     <% end %>
-  </div>
 
-  <div class="visites">
-    <h2>Mes achats</h2>
-    <% if current_user.orders.empty? %>
-      <div class="empty"><i> Vous n'avez effectuer aucun achat pour le moment</i></div>
-      <div><%= link_to "Trouver un article", articles_path, class: "btn button-reserver" %></div>
-    <% else %>
-      <% if current_user.orders.any? { |order| order.status == "en attente de validation" } %>
-        <div class="section">
-          <h3 class="mb-3">Offres en attente &#8987</h3>
-          <% current_user.orders.select { |order| order.status == "en attente de validation" }.each do |order| %>
-            <%= link_to article_path(order.article), class: "text-decoration-none" do %>
+    <% if current_user.articles.any? { |article| article.orders.any? { |order| order.status == "validée" } } %>
+      <div class="section">
+        <h3 class="mb-3">Offres validées &#9989</h3>
+        <% current_user.articles.each do |article| %>
+          <% if article.orders.any? { |order| order.status == "validée" } %>
+            <%= link_to article_path(article), class: "text-decoration-none" do %>
               <div class="card-control">
-                <h3 class="text-dark"><%= truncate(order.article.name, length: 18, omission: '...') %></h3>
-                <p class="text-muted"><%= order.article.user.first_name.capitalize %></p>
-                <p class="text-muted"><i><%= order.status %></i></p>
-                <div class="btn-flex">
-                <button type="button" class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#confirmationModal">
-                  Supprimer cette offre
-                </button>
-                <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-name" id="confirmationModalLabel">Confirmation</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        Etes vous sûr de vouloir supprimer votre offre ?
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Annuler</button>
-                        <%=link_to "Supprimer", order_path(order, article_id: order.article_id), data: {turbo_method: :delete}, class:"btn button-supprimer-mod"%>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              </div>
-            <% end %>
-
-          <% end %>
-        </div>
-      <% end %>
-
-      <% if current_user.orders.any? { |order| order.status == "validée" } %>
-        <div class="section">
-          <h3 class="mb-3">Offres acceptées &#9989</h3>
-          <% current_user.orders.select { |order| order.status == "validée" }.each do |order| %>
-            <%= link_to article_path(order.article), class: "text-decoration-none" do %>
-              <div class="card-control">
-                <h3 class="text-dark"><%= truncate(order.article.name, length: 18, omission: '...') %></h3>
-                <p class="text-muted"><%= order.article.user.first_name.capitalize %></p>
-                <p class="text-muted"><i><%= order.status %></i></p>
-                <div class="btn-flex">
-                  <button type="button" class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#confirmationModal">
-                    Supprimer cette offre
-                  </button>
-                  <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-name" id="confirmationModalLabel">Confirmation</h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                          Etes vous sûr de vouloir supprimer votre offre ?
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Annuler</button>
-                          <%=link_to "Supprimer", order_path(order), data: {turbo_method: :delete}, class:"btn button-supprimer-mod"%>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <h3 class="text-dark"><%= truncate(article.name, length: 28, omission: '...') %></h3>
+                <% article.orders.each do |order| %>
+                  <% if order.status == "validée" %>
+                    <%= link_to user_path(order.user), class: "nav-link" do %>
+                      <p class="text-muted">Offre réalisée par : <b><%= order.user.first_name.capitalize %></b></p>
+                    <% end %>
+                    <p class="text-muted"><i><%= order.status %></i></p>
+                  <% end %>
+                <% end %>
               </div>
             <% end %>
           <% end %>
-        </div>
-      <% end %>
-
-      <% if current_user.orders.any? { |order| order.status == "rejetée" } %>
-        <div class="section">
-          <h3 class="mb-3">Offres rejetées &#10060</h3>
-          <% current_user.orders.select { |order| order.status == "rejetée" }.each do |order| %>
-            <%= link_to article_path(order.article), class: "text-decoration-none" do %>
-              <div class="card-control">
-                <h3 class="text-dark"><%= truncate(order.article.name, length: 18, omission: '...') %></h3>
-                <p class="text-muted"><%= order.article.user.first_name.capitalize %></p>
-                <p class="text-muted"><i><%= order.status %></i></p>
-              </div>
-            <% end %>
-          <% end %>
-        </div>
-      <% end %>
-
-      <% if current_user.orders.any? { |order| order.status == "terminée" } %>
-        <div class="section">
-          <h3 class="mb-3">Achats effectués &#127881</h3>
-          <% current_user.orders.select { |order| order.status == "terminée" }.each do |order| %>
-            <%= link_to article_path(order.article), class: "text-decoration-none" do %>
-              <div class="card-control">
-                <h3 class="text-dark"><%= truncate(order.article.name, length: 18, omission: '...') %></h3>
-                <p class="text-muted"><%= order.article.user.first_name.capitalize %></p>
-                <p class="text-muted"><i><%= order.status %></i></p>
-              </div>
-            <% end %>
-          <% end %>
-        </div>
-      <% end %>
+        <% end %>
+      </div>
     <% end %>
+
+    <% if current_user.articles.any? { |article| article.orders.any? { |order| order.status == "rejetée" } } %>
+      <div class="section">
+        <h3 class="mb-3">Offres rejetées &#10060</h3>
+        <% current_user.articles.each do |article| %>
+          <% if article.orders.any? { |order| order.status == "rejetée" } %>
+            <%= link_to article_path(article), class: "text-decoration-none" do %>
+              <div class="card-control">
+                <h3 class="text-dark"><%= truncate(article.name, length: 28, omission: '...') %></h3>
+                <% article.orders.each do |order| %>
+                  <% if order.status == "rejetée" %>
+                    <%= link_to user_path(order.user), class: "nav-link" do %>
+                      <p class="text-muted">Offre réalisée par : <b><%= order.user.first_name.capitalize %></b></p>
+                    <% end %>
+                    <p class="text-muted"><i><%= order.status %></i></p>
+                  <% end %>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if current_user.articles.any? { |article| article.orders.any? { |order| order.status == "terminée" } } %>
+      <div class="section">
+        <h3 class="mb-3">Ventes terminées &#127881</h3>
+        <% current_user.articles.each do |article| %>
+          <% if article.orders.any? { |order| order.status == "terminée" } %>
+            <%= link_to article_path(article), class: "text-decoration-none" do %>
+              <div class="card-control">
+                <h3 class="text-dark"><%= truncate(article.name, length: 28, omission: '...') %></h3>
+                <% article.orders.each do |order| %>
+                  <% if order.status == "terminée" %>
+                    <p class="text-muted"><i><%= order.status %></i></p>
+                    <%= link_to user_path(order.user), class: "nav-link" do %>
+                      <p class="text-muted">Laissez un avis à <b><%= order.user.first_name.capitalize %></b> !</p>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if current_user.articles.any? { |article| article.orders.empty? } %>
+      <div class="section">
+        <% current_user.articles.each do |article| %>
+          <% if article.orders.empty? %>
+            <%= link_to article_path(article), class: "text-decoration-none" do %>
+              <div class="card-control">
+                <h3 class="text-dark"><%= truncate(article.name, length: 28, omission: '...') %></h3>
+                <p class="text-muted"><i>Aucune offre pour le moment</i></p>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
