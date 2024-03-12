@@ -1,6 +1,6 @@
 class Article < ApplicationRecord
   belongs_to :user
-  has_many :orders
+  has_many :orders, dependent: :destroy
   has_many_attached :photos
 
   validates :name, presence: true, length: { maximum: 20 }
@@ -14,7 +14,7 @@ class Article < ApplicationRecord
 
   include PgSearch::Model
   pg_search_scope :search_by_name,
-  against: [ :name, :description, :categorie, :brand, :color ],
+  against: [ :name, :description, :categorie, :brand, :color, :size, :state],
   using: {
     tsearch: { prefix: true }
   }

@@ -1,0 +1,120 @@
+<h1>Tableau de bord</h1>
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link " aria-current="page" href="<%= control_path %>">Mes articles en vente</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="#">Mes achats et offres</a>
+  </li>
+</ul>
+
+<div class="visites">
+  <% if current_user.orders.empty? %>
+    <div class="empty"><i> Vous n'avez effectuer aucun achat pour le moment</i></div>
+    <div><%= link_to "Trouver un article", articles_path, class: "btn button-reserver" %></div>
+  <% else %>
+    <% if current_user.orders.any? { |order| order.status == "en attente de validation" } %>
+      <div class="section">
+        <h3 class="mb-3">Offres en attente &#8987</h3>
+        <% current_user.orders.select { |order| order.status == "en attente de validation" }.each do |order| %>
+          <%= link_to article_path(order.article), class: "text-decoration-none" do %>
+            <div class="card-control">
+              <h3 class="text-dark"><%= truncate(order.article.name, length: 18, omission: '...') %></h3>
+              <p class="text-muted"><%= order.article.user.first_name.capitalize %></p>
+              <p class="text-muted"><i><%= order.status %></i></p>
+              <div class="btn-flex">
+              <button type="button" class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+                Supprimer cette offre
+              </button>
+              <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-name" id="confirmationModalLabel">Confirmation</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      Etes vous sûr de vouloir supprimer votre offre ?
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Annuler</button>
+                      <%=link_to "Supprimer", order_path(order, article_id: order.article_id), data: {turbo_method: :delete}, class:"btn button-supprimer-mod"%>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+          <% end %>
+
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if current_user.orders.any? { |order| order.status == "validée" } %>
+      <div class="section">
+        <h3 class="mb-3">Offres acceptées &#9989</h3>
+        <% current_user.orders.select { |order| order.status == "validée" }.each do |order| %>
+          <%= link_to article_path(order.article), class: "text-decoration-none" do %>
+            <div class="card-control">
+              <h3 class="text-dark"><%= truncate(order.article.name, length: 18, omission: '...') %></h3>
+              <p class="text-muted"><%= order.article.user.first_name.capitalize %></p>
+              <p class="text-muted"><i><%= order.status %></i></p>
+              <div class="btn-flex">
+                <button type="button" class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+                  Supprimer cette offre
+                </button>
+                <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-name" id="confirmationModalLabel">Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        Etes vous sûr de vouloir supprimer votre offre ?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Annuler</button>
+                        <%=link_to "Supprimer", order_path(order), data: {turbo_method: :delete}, class:"btn button-supprimer-mod"%>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if current_user.orders.any? { |order| order.status == "rejetée" } %>
+      <div class="section">
+        <h3 class="mb-3">Offres rejetées &#10060</h3>
+        <% current_user.orders.select { |order| order.status == "rejetée" }.each do |order| %>
+          <%= link_to article_path(order.article), class: "text-decoration-none" do %>
+            <div class="card-control">
+              <h3 class="text-dark"><%= truncate(order.article.name, length: 18, omission: '...') %></h3>
+              <p class="text-muted"><%= order.article.user.first_name.capitalize %></p>
+              <p class="text-muted"><i><%= order.status %></i></p>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if current_user.orders.any? { |order| order.status == "terminée" } %>
+      <div class="section">
+        <h3 class="mb-3">Achats effectués &#127881</h3>
+        <% current_user.orders.select { |order| order.status == "terminée" }.each do |order| %>
+          <%= link_to article_path(order.article), class: "text-decoration-none" do %>
+            <div class="card-control">
+              <h3 class="text-dark"><%= truncate(order.article.name, length: 18, omission: '...') %></h3>
+              <p class="text-muted"><%= order.article.user.first_name.capitalize %></p>
+              <p class="text-muted"><i><%= order.status %></i></p>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
