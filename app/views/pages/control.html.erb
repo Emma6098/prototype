@@ -147,7 +147,7 @@
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Annuler</button>
-                        <%=link_to "Supprimer", order_path(order), data: {turbo_method: :delete}, class:"btn button-supprimer-mod"%>
+                        <%=link_to "Supprimer", order_path(order, article_id: order.article_id), data: {turbo_method: :delete}, class:"btn button-supprimer-mod"%>
                       </div>
                     </div>
                   </div>

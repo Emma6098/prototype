@@ -20,7 +20,7 @@ class OrdersController < ApplicationController
   def destroy
     @order_delete = Order.find(params[:id])
     @order_delete.destroy
-    redirect_to control_path(@order.article), status: see_other
+    redirect_to control_path, notice: 'Order was successfully destroyed.', status: :see_other
   end
 
   def accept
@@ -38,7 +38,7 @@ class OrdersController < ApplicationController
   end
 
   def ended
-    @article = Artcile.find(params[:id])
+    @article = Article.find(params[:id])
     @order = Order.where(article: @article, status: "validée")
     @order.update!(status: "terminée")
     redirect_to control_path

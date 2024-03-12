@@ -38,6 +38,7 @@
           </div>
         <%elsif user_order.status == "en attente de validation"%>
           <div class="btn button-reserver">En attente d'une réponse</div>
+
         <%elsif user_order.status == "rejetée"%>
           <div class="btn button-reserver">Votre offre a été rejetée</div>
         <%end%>
@@ -46,12 +47,10 @@
       <div class="btn button-reserver">L'article a été réservée</div>
     <% else %>
 
-    <%= link_to "Acheter l'article", article_orders_path(@article, buy_now: true), method: :post, class: "btn button-reserver" %>
-
-      <button type="button" class="btn button-reserver" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+      <button type="button" class="btn button-reserver" data-bs-toggle="modal" data-bs-target="#confirmationModalOffer">
           Faire une offre
       </button>
-      <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+      <div class="modal fade" id="confirmationModalOffer" tabindex="-1" aria-labelledby="confirmationModalLabelOffer" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -71,10 +70,10 @@
       </div>
       </div>
 
-        <button type="button" class="btn button-reserver" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+        <button type="button" class="btn button-reserver" data-bs-toggle="modal" data-bs-target="#confirmationModalBuy">
           Acheter l'article
       </button>
-      <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+      <div class="modal fade" id="confirmationModalBuy" tabindex="-1" aria-labelledby="confirmationModalLabelBuy" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -86,16 +85,16 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Annuler</button>
-            <%=link_to "Acheter l'article", article_orders_path(@article), data: {turbo_method: :post}, class:"btn button-re-mod"%>
+            <%=link_to "Acheter l'article", article_orders_path(@article, buy_now: true), data: {turbo_method: :post}, class:"btn button-re-mod"%>
           </div>
         </div>
       </div>
       </div>
 
-      <button type="button" class="btn button-reserver" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+      <button type="button" class="btn button-reserver" data-bs-toggle="modal" data-bs-target="#confirmationModalContact">
           Contacter le vendeur
       </button>
-      <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+      <div class="modal fade" id="confirmationModalContact" tabindex="-1" aria-labelledby="confirmationModalLabelContact" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
