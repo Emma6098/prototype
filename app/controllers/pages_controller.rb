@@ -1,7 +1,19 @@
 class PagesController < ApplicationController
   # skip_before_action :authenticate_user!, only: [ :home ]
+  before_action :set_article, only: [:create]
 
   def home
+  end
+
+  def create
+    @order = Order.new
+    @order.article = @article
+    @order.user = current_user
+
+    @order.offer_price = order_params[:offer_price]
+
+    @order.save!
+    redirect_to control_path(@order)
   end
 
   def accept
@@ -23,5 +35,15 @@ class PagesController < ApplicationController
     @order = Order.where(article: @article, status: "validée")
     @order.update!(status: "terminée")
     redirect_to control_path
+  end
+
+  private
+
+  def set_article
+    @article = Article.find(params[:article_id])
+  end
+
+  def order_params
+    params.require(:order).permit(:offer_price)
   end
 end

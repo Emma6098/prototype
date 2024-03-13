@@ -14,7 +14,8 @@ Rails.application.routes.draw do
   resources :users, only: :show do
     resources :reviews, only: [:create]
   end
+
   get "control", to: "pages#control"
   get "control2", to: "pages#control2"
-
+  post "create_order", to: "pages#create"
 end

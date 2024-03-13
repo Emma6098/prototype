@@ -71,9 +71,32 @@
                 <% article.orders.each do |order| %>
                   <% if order.status == "rejetée" %>
                     <%= link_to user_path(order.user), class: "nav-link" do %>
-                      <p class="text-muted">Offre réalisée par : <b><%= order.user.first_name.capitalize %></b></p>
+                      <p class="text-muted"><b><%= order.user.first_name.capitalize %></b> t'avais proposé un prix de <%= order.offer_price %> € </p>
                     <% end %>
                     <p class="text-muted"><i><%= order.status %></i></p>
+                    <button type="button" class="btn button-reserver" data-bs-toggle="modal" data-bs-target="#contreOffreModal">
+                      Faire une contre-offre
+                    </button>
+                    <div class="modal fade" id="contreOffreModal" tabindex="-1" aria-labelledby="contreOffreModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="contreOffreModalLabel">Faire une contre-offre</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <%= form_with(model: @order, url: create_order_path(@article), method: :post) do |form| %>
+                              <div class="mb-3">
+                                <%= form.label :offer_price, "Nouveau prix de l'offre" %>
+                                <%= form.text_field :offer_price, class: "form-control" %>
+                              </div>
+                              <%= form.submit "Soumettre la contre-offre", class: "btn btn-primary" %>
+                            <% end %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                   <% end %>
                 <% end %>
               </div>
