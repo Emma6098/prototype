@@ -17,5 +17,5 @@ Rails.application.routes.draw do
 
   get "control", to: "pages#control"
   get "control2", to: "pages#control2"
-  post "create_order", to: "pages#create"
+
 end

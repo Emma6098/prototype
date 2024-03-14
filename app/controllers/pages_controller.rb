@@ -5,15 +5,26 @@ class PagesController < ApplicationController
   def home
   end
 
+  def control2
+    @articles = Article.all # Ou toute autre logique pour récupérer les articles
+    @sellers = User.where(id: @articles.pluck(:user_id)) # Récupérer tous les vendeurs des articles
+  end
+
   def create
-    @order = Order.new
+    @order = Order.new(order_params)
     @order.article = @article
     @order.user = current_user
-
-    @order.offer_price = order_params[:offer_price]
-
+    @order = Order.find(params[:id])
+    @seller = @article.user
+    if params[:buy_now]
+      @order.status = "validée"
+    else
+      # Si l'utilisateur fait une offre
+      @order.status = "en attente de validation"
+      @order.offer_price = order_params[:offer_price]
+    end
     @order.save!
-    redirect_to control_path(@order)
+    redirect_to control_path
   end
 
   def accept
@@ -31,7 +42,7 @@ class PagesController < ApplicationController
   end
 
   def ended
-    @article = Artcile.find(params[:id])
+    @article = Article.find(params[:id])
     @order = Order.where(article: @article, status: "validée")
     @order.update!(status: "terminée")
     redirect_to control_path
@@ -44,6 +55,6 @@ class PagesController < ApplicationController
   end
 
   def order_params
-    params.require(:order).permit(:offer_price)
+    params.require(:order).permit(:offer_price, :order_id)
   end
 end

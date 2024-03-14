@@ -12,7 +12,9 @@
   <% if current_user.orders.empty? %>
     <div class="empty"><i> Vous n'avez effectuer aucun achat pour le moment</i></div>
     <div><%= link_to "Trouver un article", articles_path, class: "btn button-reserver" %></div>
+
   <% else %>
+
     <% if current_user.orders.any? { |order| order.status == "en attente de validation" } %>
       <div class="section">
         <h3 class="mb-3">Offres en attente &#8987</h3>
@@ -46,7 +48,6 @@
             </div>
             </div>
           <% end %>
-
         <% end %>
       </div>
     <% end %>
@@ -97,9 +98,12 @@
               <h3 class="text-dark"><%= truncate(order.article.name, length: 18, omission: '...') %></h3>
               <p class="text-muted"><%= order.article.user.first_name.capitalize %></p>
               <p class="text-muted"><i><%= order.status %></i></p>
+              <% if current_user != @seller %>
+                <p class="text-muted">Prix de la contre-offre: <%= order.offer_price %> €</p>
+              <% end %>
             </div>
           <% end %>
-        <% end %>
+        <%end%>
       </div>
     <% end %>
 

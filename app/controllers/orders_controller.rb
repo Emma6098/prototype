@@ -5,6 +5,7 @@ class OrdersController < ApplicationController
     @order = Order.new
     @order.article = @article
     @order.user = current_user
+    @seller = @article.user
     if params[:buy_now]
       @order.status = "validée"
     else
@@ -29,7 +30,7 @@ class OrdersController < ApplicationController
   end
 
   def order_params
-    params.require(:order).permit(:offer_price)
+    params.require(:order).permit(:offer_price, :order_id)
   end
 
 end
