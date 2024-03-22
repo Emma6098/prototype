@@ -11,8 +11,10 @@
   <% if current_user.articles.empty? %>
     <div class="empty"><p><i>Vous ne proposez aucun article à la vente pour le moment</i></p></div>
     <div><%= link_to "Ajouter un article", new_article_path, class: "btn button-reserver" %></div>
+
   <% else %>
-    <% if current_user.articles.any? { |article| article.orders.any? { |order| order.status == "en attente de validation" } } %>
+
+    <% if current_user.articles.any? { |article| article.orders.any? { |order| order.status == "en attente de validation" && order.user != current_user } } %>
       <div class="section">
         <h3 class="mb-3">Offres en attente &#8987</h3>
         <% current_user.articles.each do |article| %>
@@ -71,9 +73,32 @@
                 <% article.orders.each do |order| %>
                   <% if order.status == "rejetée" %>
                     <%= link_to user_path(order.user), class: "nav-link" do %>
-                      <p class="text-muted">Offre réalisée par : <b><%= order.user.first_name.capitalize %></b></p>
+                      <p class="text-muted"><b><%= order.user.first_name.capitalize %></b> t'avais proposé un prix de <%= order.offer_price %> € </p>
                     <% end %>
                     <p class="text-muted"><i><%= order.status %></i></p>
+                    <button type="button" class="btn button-reserver" data-bs-toggle="modal" data-bs-target="#contreOffreModal_<%= order.id %>">
+                      Faire une contre-offre
+                    </button>
+                    <div class="modal fade" id="contreOffreModal_<%= order.id %>" tabindex="-1" aria-labelledby="contreOffreModalLabel_<%= order.id %>" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="contreOffreModalLabel_<%= order.id %>">Faire une contre-offre</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <%= form_with(model: @order_counter_offer, url: submit_counter_offer_path, method: :post) do |form| %>
+                              <div class="mb-3">
+                                <%= form.label :counter_offer_price, "Nouveau prix de l'offre" %>
+                                <%= form.text_field :counter_offer_price, class: "form-control" %>
+                              </div>
+                              <%= form.hidden_field :order_id, value: order.id %>
+                              <%= form.submit "Soumettre la contre-offre", class: "btn btn-primary" %>
+                            <% end %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   <% end %>
                 <% end %>
               </div>

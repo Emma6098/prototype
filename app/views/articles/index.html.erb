@@ -8,19 +8,21 @@
               <i class="fa-solid fa-magnifying-glass"></i>
             <% end %>
           </div>
-          <%= text_field_tag :keyword, params[:keyword], class: "form-control search", placeholder: "Rechercher un Article !" %>
+          <%= text_field_tag :keyword, params[:keyword], class: "form-control search", placeholder: "Recherche un Article !" %>
         </div>
       <% end %>
   </div>
 
 <% @articles.each do |article| %>
-  <%= link_to article_path(article) do%>
-    <div>
-      <h3 class="taille-titre"><%= article.name %></h3>
-      <b><%= article.price %>€</b>
-      <p><%= article.size %></p>
-      <p><%= article.brand %></p>
-      <%# favoris %>
-    <div>
+  <% unless article.orders.find { |order| order.status == "validée" } || article.orders.find { |order| order.status == "terminée" } %>
+    <%= link_to article_path(article) do%>
+      <div>
+        <h3 class="taille-titre"><%= article.name %></h3>
+        <b><%= article.price %>€</b>
+        <p><%= article.size %></p>
+        <p><%= article.brand %></p>
+        <%# favoris %>
+      <div>
+    <% end %>
   <% end %>
 <% end %>
