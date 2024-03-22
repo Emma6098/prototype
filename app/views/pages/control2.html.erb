@@ -77,7 +77,7 @@
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Annuler</button>
-                        <%=link_to "Supprimer", order_path(order), data: {turbo_method: :delete}, class:"btn button-supprimer-mod"%>
+                        <%=link_to "Supprimer", order_path(order, article_id: order.article_id), data: {turbo_method: :delete}, class:"btn button-supprimer-mod"%>
                       </div>
                     </div>
                   </div>
@@ -89,17 +89,19 @@
       </div>
     <% end %>
 
-    <% if current_user.orders.any? { |order| order.status == "rejetée" } %>
+    <% if current_user.orders.any? { |order| order.status == "contre-offre" } %>
       <div class="section">
         <h3 class="mb-3">Offres rejetées &#10060</h3>
-        <% current_user.orders.select { |order| order.status == "rejetée" }.each do |order| %>
+        <% current_user.orders.select { |order| order.status == "contre-offre" }.each do |order| %>
           <%= link_to article_path(order.article), class: "text-decoration-none" do %>
             <div class="card-control">
               <h3 class="text-dark"><%= truncate(order.article.name, length: 18, omission: '...') %></h3>
               <p class="text-muted"><%= order.article.user.first_name.capitalize %></p>
               <p class="text-muted"><i><%= order.status %></i></p>
               <% if current_user != @seller %>
-                <p class="text-muted">Prix de la contre-offre: <%= order.offer_price %> €</p>
+                <p class="text-muted">Prix de la contre-offre: <%= order.counter_offer_price %> €</p>
+                <p><%= link_to "Accepter l'offre", order_accept_path(order), data: { turbo_method: :patch, turbo_confirm: "Etes vous sûr de vouloir accepter cette offre ?" }, class: "btn btn-accept text-decoration-none" %></p>
+                <p><%= link_to "Rejeter l'offre", order_reject_path(order), data: { turbo_method: :patch, turbo_confirm: "Etes vous sûr de vouloir rejeter cette offre ?" }, class: "btn btn-reject text-decoration-none" %></p>
               <% end %>
             </div>
           <% end %>

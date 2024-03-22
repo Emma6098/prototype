@@ -35,6 +35,12 @@ class PagesController < ApplicationController
 
   end
 
+  def submit_counter_offer
+    @order_counter_offer = Order.find(params[:order_id])
+    @order_counter_offer.update!(status: "contre-offre", counter_offer_price: params[:counter_offer_price])
+    redirect_to control_path
+  end
+
   def reject
     @order_reject = Order.find(params[:order_id])
     @order_reject.update!(status: "rejetée")
@@ -48,6 +54,14 @@ class PagesController < ApplicationController
     redirect_to control_path
   end
 
+  def destroy
+    @order_delete = Order.find(params[:id])
+    @order_delete.update!(status: "annulée")
+    @order_delete.destroy
+
+    redirect_to control_path, notice: 'Order was successfully destroyed.', status: :see_other
+  end
+
   private
 
   def set_article
@@ -55,6 +69,6 @@ class PagesController < ApplicationController
   end
 
   def order_params
-    params.require(:order).permit(:offer_price, :order_id)
+    params.require(:order).permit(:offer_price, :order_id, :counter_offer_price)
   end
 end

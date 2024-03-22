@@ -87,10 +87,10 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                           </div>
                           <div class="modal-body">
-                            <%= form_with(model: order, url: article_orders_path(article), method: :post) do |form| %>
+                            <%= form_with(model: @order_counter_offer, url: submit_counter_offer_path, method: :post) do |form| %>
                               <div class="mb-3">
-                                <%= form.label :offer_price, "Nouveau prix de l'offre" %>
-                                <%= form.text_field :offer_price, class: "form-control" %>
+                                <%= form.label :counter_offer_price, "Nouveau prix de l'offre" %>
+                                <%= form.text_field :counter_offer_price, class: "form-control" %>
                               </div>
                               <%= form.hidden_field :order_id, value: order.id %>
                               <%= form.submit "Soumettre la contre-offre", class: "btn btn-primary" %>
